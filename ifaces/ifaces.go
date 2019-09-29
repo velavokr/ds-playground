@@ -66,6 +66,6 @@ type DiskTable interface {
 type Signature = string
 
 type PKI interface {
-	SignMessage(dst NodeName, msg []byte) Signature
-	CheckSignature(mac Signature, src NodeName, dst NodeName, msg []byte) bool
+	SignMessage(msg []byte) Signature
+	CheckSignature(mac Signature, msg []byte) bool
 }

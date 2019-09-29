@@ -2,9 +2,9 @@ package timer
 
 import (
 	"bytes"
-	"github.com/velavokr/gdaf"
-	"github.com/velavokr/gdaf/demoserver/nodeenv"
-	"github.com/velavokr/gdaf/demoserver/runner"
+	"github.com/velavokr/dsplayground/ifaces"
+	"github.com/velavokr/dsplayground/demoserver/nodeenv"
+	"github.com/velavokr/dsplayground/demoserver/runner"
 	"testing"
 	"time"
 )
@@ -19,7 +19,7 @@ func TestTimer(t *testing.T) {
 	timer := nodeenv.NewNodeEnv(rt, NewTimer).Timer(&h)
 
 	cnt := 10
-	ids := make([]gdaf.TimerId, cnt)
+	ids := make([]ifaces.TimerId, cnt)
 	for i := 0; i < cnt; i++ {
 		ids[i] = timer.After(uint32(i), i)
 	}
@@ -29,7 +29,7 @@ func TestTimer(t *testing.T) {
 		}, runner.ExitOnPanic, "cancel timer", ids[i])
 	}
 	time.Sleep(rt.Cfg.Tick * 12)
-	allowed := map[gdaf.TimerId]int{
+	allowed := map[ifaces.TimerId]int{
 		1: 0, 2: 1, 4: 3, 6: 5, 8: 7, 10: 9,
 	}
 	rt.RunGuarded(func() {
@@ -52,7 +52,7 @@ func TestTimer(t *testing.T) {
 }
 
 type alarm struct {
-	id  gdaf.TimerId
+	id  ifaces.TimerId
 	ctx interface{}
 }
 
@@ -60,7 +60,7 @@ type handler struct {
 	alarms []alarm
 }
 
-func (h *handler) HandleTimer(ctx interface{}, id gdaf.TimerId) {
+func (h *handler) HandleTimer(ctx interface{}, id ifaces.TimerId) {
 	h.alarms = append(h.alarms, alarm{
 		id:  id,
 		ctx: ctx,

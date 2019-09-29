@@ -3,11 +3,11 @@ package loggedperfect
 import (
 	"encoding/binary"
 	"fmt"
-	"github.com/velavokr/gdaf"
-	"github.com/velavokr/gdaf/examples/link"
+	"github.com/velavokr/dsplayground/ifaces"
+	"github.com/velavokr/dsplayground/examples/link"
 )
 
-func NewLoggedPerfectLink(handler gdaf.NetHandler, env gdaf.NodeEnv) link.Link {
+func NewLoggedPerfectLink(handler ifaces.NetHandler, env ifaces.NodeEnv) link.Link {
 	lpl := &loggedPerfectLink{
 		netHandler: handler,
 	}
@@ -21,12 +21,12 @@ func NewLoggedPerfectLink(handler gdaf.NetHandler, env gdaf.NodeEnv) link.Link {
 }
 
 type loggedPerfectLink struct {
-	timer        gdaf.Timer
-	netHandler   gdaf.NetHandler
-	fairLossLink gdaf.Net
-	cnt          gdaf.DiskTable
-	toSend       gdaf.DiskTable
-	delivered    gdaf.DiskTable
+	timer        ifaces.Timer
+	netHandler   ifaces.NetHandler
+	fairLossLink ifaces.Net
+	cnt          ifaces.DiskTable
+	toSend       ifaces.DiskTable
+	delivered    ifaces.DiskTable
 }
 
 const (
@@ -37,13 +37,13 @@ const (
 )
 
 type id struct {
-	src gdaf.NodeName
+	src ifaces.NodeName
 	seq uint64
 }
 
 type sendCtx struct {
 	msg []byte
-	dst gdaf.NodeName
+	dst ifaces.NodeName
 }
 
 type frame struct {
@@ -52,7 +52,7 @@ type frame struct {
 	msg    []byte
 }
 
-func (lpl *loggedPerfectLink) SendMessage(dst gdaf.NodeName, rawMsg []byte) {
+func (lpl *loggedPerfectLink) SendMessage(dst ifaces.NodeName, rawMsg []byte) {
 	cnt := decodeCnt(lpl.cnt.LoadValue([]byte(cntKey))) + 1
 	ctx := sendCtx{
 		msg: lpl.encodeFrame(frame{
@@ -69,7 +69,7 @@ func (lpl *loggedPerfectLink) SendMessage(dst gdaf.NodeName, rawMsg []byte) {
 	lpl.timer.NextTick(cnt)
 }
 
-func (lpl *loggedPerfectLink) ReceiveMessage(src gdaf.NodeName, rawMsg []byte) {
+func (lpl *loggedPerfectLink) ReceiveMessage(src ifaces.NodeName, rawMsg []byte) {
 	msg := lpl.decodeFrame(rawMsg)
 	id := encodeId(id{
 		src: src,
@@ -102,7 +102,7 @@ func (lpl *loggedPerfectLink) ReceiveMessage(src gdaf.NodeName, rawMsg []byte) {
 	}
 }
 
-func (lpl *loggedPerfectLink) HandleTimer(cnt interface{}, id gdaf.TimerId) {
+func (lpl *loggedPerfectLink) HandleTimer(cnt interface{}, id ifaces.TimerId) {
 	rawCtx := lpl.toSend.LoadValue(encodeCnt(cnt.(uint64)))
 	if rawCtx != nil {
 		ctx := decodeCtx(rawCtx)
@@ -161,7 +161,7 @@ func encodeCtx(ctx sendCtx) []byte {
 func decodeCtx(rawCtx []byte) sendCtx {
 	ln := binary.LittleEndian.Uint32(rawCtx)
 	return sendCtx{
-		dst: gdaf.NodeName(rawCtx[4 : 4+ln]),
+		dst: ifaces.NodeName(rawCtx[4 : 4+ln]),
 		msg: rawCtx[4+ln:],
 	}
 }

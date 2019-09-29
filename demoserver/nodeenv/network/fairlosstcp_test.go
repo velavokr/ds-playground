@@ -3,10 +3,10 @@ package network
 import (
 	"bytes"
 	"fmt"
-	"github.com/velavokr/gdaf"
-	"github.com/velavokr/gdaf/demoserver/nodeenv"
-	"github.com/velavokr/gdaf/demoserver/runner"
-	"github.com/velavokr/gdaf/demoserver/utils"
+	"github.com/velavokr/dsplayground/ifaces"
+	"github.com/velavokr/dsplayground/demoserver/nodeenv"
+	"github.com/velavokr/dsplayground/demoserver/runner"
+	"github.com/velavokr/dsplayground/demoserver/utils"
 	"sort"
 	"strings"
 	"testing"
@@ -17,7 +17,7 @@ func TestFairLossTcp(t *testing.T) {
 	nodes := genNodes()
 	envs := genEnvs(nodes)
 	handlers := [2]netHandler{}
-	nets := [2]gdaf.Net{
+	nets := [2]ifaces.Net{
 		nodeenv.NewNodeEnv(envs[0], NewFairLossTcp).Net(&handlers[0]),
 		nodeenv.NewNodeEnv(envs[1], NewFairLossTcp).Net(&handlers[1]),
 	}
@@ -46,7 +46,7 @@ func TestFairLossTcpDrop(t *testing.T) {
 	nodes := genNodes()
 	envs := genEnvs(nodes)
 	handlers := [2]netHandler{}
-	nets := [2]gdaf.Net{
+	nets := [2]ifaces.Net{
 		NewFairLossTcp(envs[0], &handlers[0]),
 		NewFairLossTcp(envs[1], &handlers[1]),
 	}
@@ -77,7 +77,7 @@ type netHandler struct {
 	res []message
 }
 
-func (n *netHandler) ReceiveMessage(src gdaf.NodeName, msg []byte) {
+func (n *netHandler) ReceiveMessage(src ifaces.NodeName, msg []byte) {
 	n.res = append(n.res, message{src: src, data: msg})
 	sort.Slice(n.res, func(i, j int) bool {
 		return bytes.Compare(n.res[i].data, n.res[j].data) < 0
@@ -97,7 +97,7 @@ func genEnvs(nodes [2]string) [2]*runner.Runtime {
 	cfgs := [2]*runner.Runtime{}
 	for i := 0; i < 2; i++ {
 		cfgs[i] = runner.NewRuntime(runner.UserCfg{
-			Group:     gdaf.Group{Nodes: nodes[:], Self: i},
+			Group:     ifaces.Group{Nodes: nodes[:], Self: i},
 			Tick:      time.Millisecond * 100,
 			IoTimeout: time.Second * 10,
 		}, &b[i])

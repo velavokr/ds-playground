@@ -2,7 +2,7 @@ package logger
 
 import (
 	"fmt"
-	"github.com/velavokr/gdaf/demoserver/utils"
+	"github.com/velavokr/dsplayground/demoserver/utils"
 	"io"
 	"os"
 	"runtime"

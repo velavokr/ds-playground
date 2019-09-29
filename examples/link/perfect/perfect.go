@@ -3,11 +3,11 @@ package perfect
 import (
 	"encoding/binary"
 	"fmt"
-	"github.com/velavokr/gdaf"
-	"github.com/velavokr/gdaf/examples/link"
+	"github.com/velavokr/dsplayground/ifaces"
+	"github.com/velavokr/dsplayground/examples/link"
 )
 
-func NewPerfectLink(handler gdaf.NetHandler, env gdaf.NodeEnv) link.Link {
+func NewPerfectLink(handler ifaces.NetHandler, env ifaces.NodeEnv) link.Link {
 	pl := &perfectLink{
 		netHandler: handler,
 		toSend:     map[uint64]sendCtx{},
@@ -19,9 +19,9 @@ func NewPerfectLink(handler gdaf.NetHandler, env gdaf.NodeEnv) link.Link {
 }
 
 type perfectLink struct {
-	timer        gdaf.Timer
-	netHandler   gdaf.NetHandler
-	fairLossLink gdaf.Net
+	timer        ifaces.Timer
+	netHandler   ifaces.NetHandler
+	fairLossLink ifaces.Net
 	cnt          uint64
 	toSend       map[uint64]sendCtx
 	delivered    map[id]bool
@@ -34,13 +34,13 @@ const (
 )
 
 type id struct {
-	src gdaf.NodeName
+	src ifaces.NodeName
 	seq uint64
 }
 
 type sendCtx struct {
 	msg []byte
-	dst gdaf.NodeName
+	dst ifaces.NodeName
 }
 
 type frame struct {
@@ -49,7 +49,7 @@ type frame struct {
 	msg    []byte
 }
 
-func (pl *perfectLink) SendMessage(dst gdaf.NodeName, rawMsg []byte) {
+func (pl *perfectLink) SendMessage(dst ifaces.NodeName, rawMsg []byte) {
 	pl.cnt += 1
 	ctx := sendCtx{
 		msg: encodeMsg(frame{
@@ -64,7 +64,7 @@ func (pl *perfectLink) SendMessage(dst gdaf.NodeName, rawMsg []byte) {
 	pl.timer.NextTick(pl.cnt)
 }
 
-func (pl *perfectLink) ReceiveMessage(src gdaf.NodeName, rawMsg []byte) {
+func (pl *perfectLink) ReceiveMessage(src ifaces.NodeName, rawMsg []byte) {
 	msg := decodeMsg(rawMsg)
 	id := id{
 		src: src,
@@ -97,7 +97,7 @@ func (pl *perfectLink) ReceiveMessage(src gdaf.NodeName, rawMsg []byte) {
 	}
 }
 
-func (pl *perfectLink) HandleTimer(cnt interface{}, id gdaf.TimerId) {
+func (pl *perfectLink) HandleTimer(cnt interface{}, id ifaces.TimerId) {
 	ctx, ok := pl.toSend[cnt.(uint64)]
 	if ok {
 		pl.fairLossLink.SendMessage(ctx.dst, ctx.msg)

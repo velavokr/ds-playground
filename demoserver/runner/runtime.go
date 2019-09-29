@@ -3,8 +3,8 @@ package runner
 import (
 	"context"
 	"fmt"
-	"github.com/velavokr/gdaf/demoserver/logger"
-	"github.com/velavokr/gdaf/demoserver/utils"
+	"github.com/velavokr/dsplayground/demoserver/logger"
+	"github.com/velavokr/dsplayground/demoserver/utils"
 	"io"
 	"os"
 	"os/signal"

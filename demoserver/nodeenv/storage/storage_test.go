@@ -3,9 +3,9 @@ package storage
 import (
 	"bytes"
 	"fmt"
-	"github.com/velavokr/gdaf/demoserver/nodeenv"
-	"github.com/velavokr/gdaf/demoserver/runner"
-	"github.com/velavokr/gdaf/demoserver/utils"
+	"github.com/velavokr/dsplayground/demoserver/nodeenv"
+	"github.com/velavokr/dsplayground/demoserver/runner"
+	"github.com/velavokr/dsplayground/demoserver/utils"
 	"io/ioutil"
 	"os"
 	"runtime"

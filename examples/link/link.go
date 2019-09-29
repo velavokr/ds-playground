@@ -1,12 +1,12 @@
 package link
 
 import (
-	"github.com/velavokr/gdaf"
+	"github.com/velavokr/dsplayground/ifaces"
 )
 
 type Link interface {
-	gdaf.Net
-	gdaf.NetHandler
+	ifaces.Net
+	ifaces.NetHandler
 }
 
-type NewLink = func(handler gdaf.NetHandler, env gdaf.NodeEnv) Link
+type NewLink = func(handler ifaces.NetHandler, env ifaces.NodeEnv) Link

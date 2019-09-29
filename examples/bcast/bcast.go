@@ -1,13 +1,13 @@
 package bcast
 
 import (
-	"github.com/velavokr/gdaf"
+	"github.com/velavokr/dsplayground/ifaces"
 )
 
 type BroadcastNet interface {
-	gdaf.Net
-	gdaf.NetHandler
+	ifaces.Net
+	ifaces.NetHandler
 	Broadcast(msg []byte)
 }
 
-type NewBroadcastNet = func(group gdaf.Group, handler gdaf.NetHandler, env gdaf.NodeEnv) BroadcastNet
+type NewBroadcastNet = func(group ifaces.Group, handler ifaces.NetHandler, env ifaces.NodeEnv) BroadcastNet

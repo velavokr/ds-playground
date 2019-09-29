@@ -1,11 +1,11 @@
 package link
 
 import (
-	"github.com/velavokr/gdaf"
-	demo "github.com/velavokr/gdaf/demoserver"
-	"github.com/velavokr/gdaf/demoserver/nodeenv"
-	"github.com/velavokr/gdaf/demoserver/runner"
-	"github.com/velavokr/gdaf/demoserver/utils"
+	"github.com/velavokr/dsplayground/ifaces"
+	demo "github.com/velavokr/dsplayground/demoserver"
+	"github.com/velavokr/dsplayground/demoserver/nodeenv"
+	"github.com/velavokr/dsplayground/demoserver/runner"
+	"github.com/velavokr/dsplayground/demoserver/utils"
 	"net/url"
 )
 
@@ -28,7 +28,7 @@ func (h *linkSender) HandleApiCall(url *url.URL, b []byte) ([]byte, error) {
 	return nil, nil
 }
 
-func (h *linkReceiver) ReceiveMessage(src gdaf.NodeName, msg []byte) {
+func (h *linkReceiver) ReceiveMessage(src ifaces.NodeName, msg []byte) {
 	h.rt.Println(false, utils.Sprint("delivered from", src, msg))
 }
 
@@ -38,5 +38,5 @@ type linkReceiver struct {
 
 type linkSender struct {
 	rt   *runner.Runtime
-	link gdaf.Net
+	link ifaces.Net
 }

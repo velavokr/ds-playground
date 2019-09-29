@@ -2,7 +2,7 @@ package logger
 
 import (
 	"bytes"
-	"github.com/velavokr/gdaf/demoserver/utils"
+	"github.com/velavokr/dsplayground/demoserver/utils"
 	"strings"
 	"testing"
 )

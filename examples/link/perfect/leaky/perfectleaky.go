@@ -2,12 +2,12 @@ package leaky
 
 import (
 	"encoding/binary"
-	"github.com/velavokr/gdaf"
-	"github.com/velavokr/gdaf/examples/link"
-	"github.com/velavokr/gdaf/examples/link/stubborn"
+	"github.com/velavokr/dsplayground/ifaces"
+	"github.com/velavokr/dsplayground/examples/link"
+	"github.com/velavokr/dsplayground/examples/link/stubborn"
 )
 
-func NewPerfectLinkLeaky(handler gdaf.NetHandler, env gdaf.NodeEnv) link.Link {
+func NewPerfectLinkLeaky(handler ifaces.NetHandler, env ifaces.NodeEnv) link.Link {
 	lnk := &perfectLinkLeaky{
 		handler:   handler,
 		delivered: map[frameId]bool{},
@@ -17,14 +17,14 @@ func NewPerfectLinkLeaky(handler gdaf.NetHandler, env gdaf.NodeEnv) link.Link {
 }
 
 type perfectLinkLeaky struct {
-	handler      gdaf.NetHandler
-	stubbornLink gdaf.Net
+	handler      ifaces.NetHandler
+	stubbornLink ifaces.Net
 	delivered    map[frameId]bool
 	cnt          uint64
 }
 
 type frameId struct {
-	src gdaf.NodeName
+	src ifaces.NodeName
 	seq uint64
 }
 
@@ -33,7 +33,7 @@ type frame struct {
 	msg []byte
 }
 
-func (pl *perfectLinkLeaky) SendMessage(dst gdaf.NodeName, msg []byte) {
+func (pl *perfectLinkLeaky) SendMessage(dst ifaces.NodeName, msg []byte) {
 	pl.cnt += 1
 	pl.stubbornLink.SendMessage(
 		dst,
@@ -44,7 +44,7 @@ func (pl *perfectLinkLeaky) SendMessage(dst gdaf.NodeName, msg []byte) {
 	)
 }
 
-func (pl *perfectLinkLeaky) ReceiveMessage(src gdaf.NodeName, rawMsg []byte) {
+func (pl *perfectLinkLeaky) ReceiveMessage(src ifaces.NodeName, rawMsg []byte) {
 	msg := decodeMsg(rawMsg)
 	id := frameId{seq: msg.seq, src: src}
 	_, ok := pl.delivered[id]

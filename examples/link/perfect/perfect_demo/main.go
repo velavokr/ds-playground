@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/velavokr/gdaf/demoserver/nodeenv/network"
-	"github.com/velavokr/gdaf/demoserver/nodeenv/timer"
-	"github.com/velavokr/gdaf/examples/link"
-	"github.com/velavokr/gdaf/examples/link/perfect"
+	"github.com/velavokr/dsplayground/demoserver/nodeenv/network"
+	"github.com/velavokr/dsplayground/demoserver/nodeenv/timer"
+	"github.com/velavokr/dsplayground/examples/link"
+	"github.com/velavokr/dsplayground/examples/link/perfect"
 )
 
 func main() {

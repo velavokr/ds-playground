@@ -2,8 +2,8 @@ package demoserver
 
 import (
 	"context"
-	"github.com/velavokr/gdaf/demoserver/runner"
-	"github.com/velavokr/gdaf/demoserver/utils"
+	"github.com/velavokr/dsplayground/demoserver/runner"
+	"github.com/velavokr/dsplayground/demoserver/utils"
 	"io/ioutil"
 	"net/http"
 	"net/url"

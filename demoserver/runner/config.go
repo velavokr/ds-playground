@@ -3,14 +3,14 @@ package runner
 import (
 	"flag"
 	"fmt"
-	"github.com/velavokr/gdaf"
+	"github.com/velavokr/dsplayground/ifaces"
 	"os"
 	"strings"
 	"time"
 )
 
 type UserCfg struct {
-	gdaf.Group
+	ifaces.Group
 	Http      string
 	Tick      time.Duration
 	IoTimeout time.Duration

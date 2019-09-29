@@ -3,15 +3,15 @@ package nodeenv
 import (
 	"errors"
 	"fmt"
-	"github.com/velavokr/gdaf"
-	"github.com/velavokr/gdaf/demoserver/runner"
+	"github.com/velavokr/dsplayground/ifaces"
+	"github.com/velavokr/dsplayground/demoserver/runner"
 )
 
-type NetMaker = func(rt *runner.Runtime, handler gdaf.NetHandler) gdaf.Net
-type TimerMaker = func(rt *runner.Runtime, handler gdaf.TimerHandler) gdaf.Timer
-type StorageMaker = func(rt *runner.Runtime) gdaf.Storage
+type NetMaker = func(rt *runner.Runtime, handler ifaces.NetHandler) ifaces.Net
+type TimerMaker = func(rt *runner.Runtime, handler ifaces.TimerHandler) ifaces.Timer
+type StorageMaker = func(rt *runner.Runtime) ifaces.Storage
 
-func NewNodeEnv(rt *runner.Runtime, makers ...interface{}) gdaf.NodeEnv {
+func NewNodeEnv(rt *runner.Runtime, makers ...interface{}) ifaces.NodeEnv {
 	env := &nodeEnv{rt: rt,}
 	for _, m := range makers {
 		switch v := m.(type) {
@@ -35,21 +35,21 @@ type nodeEnv struct {
 	storage StorageMaker
 }
 
-func (n *nodeEnv) Net(handler gdaf.NetHandler) gdaf.Net {
+func (n *nodeEnv) Net(handler ifaces.NetHandler) ifaces.Net {
 	n.rt.Println(false, "initialize net")
 	return n.net(n.rt, handler)
 }
 
-func (n *nodeEnv) Timer(handler gdaf.TimerHandler) gdaf.Timer {
+func (n *nodeEnv) Timer(handler ifaces.TimerHandler) ifaces.Timer {
 	n.rt.Println(false, "initialize timer")
 	return n.timer(n.rt, handler)
 }
 
-func (n nodeEnv) Storage() gdaf.Storage {
+func (n nodeEnv) Storage() ifaces.Storage {
 	n.rt.Println(false, "initialize storage")
 	return n.storage(n.rt)
 }
 
-func (n nodeEnv) PKI() gdaf.PKI {
+func (n nodeEnv) PKI() ifaces.PKI {
 	panic("implement me")
 }

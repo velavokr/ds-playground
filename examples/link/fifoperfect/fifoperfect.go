@@ -3,14 +3,14 @@ package fifoperfect
 import (
 	"encoding/binary"
 	"fmt"
-	"github.com/velavokr/gdaf"
+	"github.com/velavokr/dsplayground/ifaces"
 )
 
-func NewFifoPerfectLink(handler gdaf.NetHandler, env gdaf.NodeEnv) gdaf.Net {
+func NewFifoPerfectLink(handler ifaces.NetHandler, env ifaces.NodeEnv) ifaces.Net {
 	pl := &perfectFifoLink{
 		handler:   handler,
-		toSend:    map[gdaf.NodeName]*sendCtx{},
-		toDeliver: map[gdaf.NodeName]*uint64{},
+		toSend:    map[ifaces.NodeName]*sendCtx{},
+		toDeliver: map[ifaces.NodeName]*uint64{},
 	}
 	pl.timer = env.Timer(pl)
 	pl.fairLossLink = env.Net(pl)
@@ -18,11 +18,11 @@ func NewFifoPerfectLink(handler gdaf.NetHandler, env gdaf.NodeEnv) gdaf.Net {
 }
 
 type perfectFifoLink struct {
-	timer        gdaf.Timer
-	handler      gdaf.NetHandler
-	fairLossLink gdaf.Net
-	toSend       map[gdaf.NodeName]*sendCtx
-	toDeliver    map[gdaf.NodeName]*uint64
+	timer        ifaces.Timer
+	handler      ifaces.NetHandler
+	fairLossLink ifaces.Net
+	toSend       map[ifaces.NodeName]*sendCtx
+	toDeliver    map[ifaces.NodeName]*uint64
 }
 
 const (
@@ -41,7 +41,7 @@ type frame struct {
 	msg    []byte
 }
 
-func (pfl *perfectFifoLink) SendMessage(dst gdaf.NodeName, rawMsg []byte) {
+func (pfl *perfectFifoLink) SendMessage(dst ifaces.NodeName, rawMsg []byte) {
 	nxt, ok := pfl.toSend[dst]
 	if !ok {
 		msgs := make([][]byte, 0, 1)
@@ -58,7 +58,7 @@ func (pfl *perfectFifoLink) SendMessage(dst gdaf.NodeName, rawMsg []byte) {
 	pfl.timer.NextTick(dst)
 }
 
-func (pfl *perfectFifoLink) ReceiveMessage(src gdaf.NodeName, rawMsg []byte) {
+func (pfl *perfectFifoLink) ReceiveMessage(src ifaces.NodeName, rawMsg []byte) {
 	msg := decodeMsg(rawMsg)
 	nxt, ok := pfl.toDeliver[src]
 	if !ok {
@@ -99,14 +99,14 @@ func (pfl *perfectFifoLink) ReceiveMessage(src gdaf.NodeName, rawMsg []byte) {
 	}
 }
 
-func (pfl perfectFifoLink) HandleTimer(dst interface{}, id gdaf.TimerId) {
-	ctx := pfl.toSend[dst.(gdaf.NodeName)]
+func (pfl perfectFifoLink) HandleTimer(dst interface{}, id ifaces.TimerId) {
+	ctx := pfl.toSend[dst.(ifaces.NodeName)]
 	for _, msg := range ctx.msgs {
-		pfl.fairLossLink.SendMessage(dst.(gdaf.NodeName), msg)
+		pfl.fairLossLink.SendMessage(dst.(ifaces.NodeName), msg)
 	}
 }
 
-func (pfl perfectFifoLink) retransmit(dst gdaf.NodeName, ctx sendCtx) {
+func (pfl perfectFifoLink) retransmit(dst ifaces.NodeName, ctx sendCtx) {
 	for _, m := range ctx.msgs {
 		pfl.fairLossLink.SendMessage(dst, m)
 	}

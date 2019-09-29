@@ -1,11 +1,11 @@
 package stubborn
 
 import (
-	"github.com/velavokr/gdaf"
-	"github.com/velavokr/gdaf/examples/link"
+	"github.com/velavokr/dsplayground/ifaces"
+	"github.com/velavokr/dsplayground/examples/link"
 )
 
-func NewStubbornLink(handler gdaf.NetHandler, env gdaf.NodeEnv) link.Link {
+func NewStubbornLink(handler ifaces.NetHandler, env ifaces.NodeEnv) link.Link {
 	lnk := &stubbornLink{
 		handler: handler,
 	}
@@ -15,18 +15,18 @@ func NewStubbornLink(handler gdaf.NetHandler, env gdaf.NodeEnv) link.Link {
 }
 
 type stubbornLink struct {
-	timer        gdaf.Timer
-	handler      gdaf.NetHandler
-	fairLossLink gdaf.Net
+	timer        ifaces.Timer
+	handler      ifaces.NetHandler
+	fairLossLink ifaces.Net
 	toSend       []ctx
 }
 
 type ctx struct {
 	msg []byte
-	dst gdaf.NodeName
+	dst ifaces.NodeName
 }
 
-func (sl *stubbornLink) SendMessage(dst gdaf.NodeName, msg []byte) {
+func (sl *stubbornLink) SendMessage(dst ifaces.NodeName, msg []byte) {
 	ctx := ctx{
 		msg: msg,
 		dst: dst,
@@ -36,11 +36,11 @@ func (sl *stubbornLink) SendMessage(dst gdaf.NodeName, msg []byte) {
 	sl.timer.NextTick(ctx)
 }
 
-func (sl *stubbornLink) ReceiveMessage(src gdaf.NodeName, rawMsg []byte) {
+func (sl *stubbornLink) ReceiveMessage(src ifaces.NodeName, rawMsg []byte) {
 	sl.handler.ReceiveMessage(src, rawMsg)
 }
 
-func (sl *stubbornLink) HandleTimer(c interface{}, id gdaf.TimerId) {
+func (sl *stubbornLink) HandleTimer(c interface{}, id ifaces.TimerId) {
 	ctx := c.(ctx)
 	sl.fairLossLink.SendMessage(ctx.dst, ctx.msg)
 	sl.timer.NextTick(ctx)

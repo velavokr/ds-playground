@@ -6,16 +6,16 @@ import (
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/errors"
 	"github.com/syndtr/goleveldb/leveldb/opt"
-	"github.com/velavokr/gdaf"
-	"github.com/velavokr/gdaf/demoserver/runner"
+	"github.com/velavokr/dsplayground/ifaces"
+	"github.com/velavokr/dsplayground/demoserver/runner"
 	"path/filepath"
 )
 
-func NewStorage(rt *runner.Runtime) gdaf.Storage {
-	return &storage{rt: rt, tables:make(map[string]gdaf.DiskTable)}
+func NewStorage(rt *runner.Runtime) ifaces.Storage {
+	return &storage{rt: rt, tables:make(map[string]ifaces.DiskTable)}
 }
 
-func (s *storage) OpenTable(path string) gdaf.DiskTable {
+func (s *storage) OpenTable(path string) ifaces.DiskTable {
 	ot, ok := s.tables[path]
 	if ok {
 		return ot
@@ -101,5 +101,5 @@ type table struct {
 
 type storage struct {
 	rt *runner.Runtime
-	tables map[string]gdaf.DiskTable
+	tables map[string]ifaces.DiskTable
 }

@@ -5,15 +5,15 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/velavokr/gdaf"
-	"github.com/velavokr/gdaf/demoserver/runner"
-	"github.com/velavokr/gdaf/demoserver/utils"
+	"github.com/velavokr/dsplayground/ifaces"
+	"github.com/velavokr/dsplayground/demoserver/runner"
+	"github.com/velavokr/dsplayground/demoserver/utils"
 	"io"
 	"io/ioutil"
 	"net"
 )
 
-func NewFairLossTcp(env *runner.Runtime, handler gdaf.NetHandler) gdaf.Net {
+func NewFairLossTcp(env *runner.Runtime, handler ifaces.NetHandler) ifaces.Net {
 	addr := env.Cfg.Nodes[env.Cfg.Self]
 	env.RunAsync(func(ctx context.Context) {
 		listener, err := new(net.ListenConfig).Listen(ctx, "tcp", addr)
@@ -71,7 +71,7 @@ type fairLossNet struct {
 	rt *runner.Runtime
 }
 
-func (f *fairLossNet) SendMessage(dst gdaf.NodeName, msg []byte) {
+func (f *fairLossNet) SendMessage(dst ifaces.NodeName, msg []byte) {
 	f.rt.RunAsync(func(ctx context.Context) {
 		conn, err := (&net.Dialer{Timeout: f.rt.Cfg.IoTimeout}).DialContext(ctx, "tcp", dst)
 		if err != nil {
@@ -99,8 +99,8 @@ func (f *fairLossNet) SendMessage(dst gdaf.NodeName, msg []byte) {
 }
 
 type message struct {
-	src  gdaf.NodeName
-	dst  gdaf.NodeName
+	src  ifaces.NodeName
+	dst  ifaces.NodeName
 	data []byte
 }
 
@@ -125,8 +125,8 @@ func decodeMsg(rawMsg []byte) message {
 		panic(errors.New(fmt.Sprintf("excess tail data (%d)", len(rawMsg))))
 	}
 	return message{
-		src:  gdaf.NodeName(res[0]),
-		dst:  gdaf.NodeName(res[1]),
+		src:  ifaces.NodeName(res[0]),
+		dst:  ifaces.NodeName(res[1]),
 		data: res[2],
 	}
 }

@@ -1,12 +1,12 @@
 package besteffort
 
 import (
-	"github.com/velavokr/gdaf"
-	"github.com/velavokr/gdaf/examples/bcast"
-	"github.com/velavokr/gdaf/examples/link/perfect"
+	"github.com/velavokr/dsplayground/ifaces"
+	"github.com/velavokr/dsplayground/examples/bcast"
+	"github.com/velavokr/dsplayground/examples/link/perfect"
 )
 
-func NewBestEffortBroadcastNet(group gdaf.Group, handler gdaf.NetHandler, env gdaf.NodeEnv) bcast.BroadcastNet {
+func NewBestEffortBroadcastNet(group ifaces.Group, handler ifaces.NetHandler, env ifaces.NodeEnv) bcast.BroadcastNet {
 	be := &bestEffort{
 		handler: handler,
 		group:   group,
@@ -21,16 +21,16 @@ func (b *bestEffort) Broadcast(msg []byte) {
 	}
 }
 
-func (b *bestEffort) SendMessage(dst gdaf.NodeName, message []byte) {
+func (b *bestEffort) SendMessage(dst ifaces.NodeName, message []byte) {
 	b.perfect.SendMessage(dst, message)
 }
 
-func (b *bestEffort) ReceiveMessage(src gdaf.NodeName, message []byte) {
+func (b *bestEffort) ReceiveMessage(src ifaces.NodeName, message []byte) {
 	b.handler.ReceiveMessage(src, message)
 }
 
 type bestEffort struct {
-	handler gdaf.NetHandler
-	perfect gdaf.Net
-	group   gdaf.Group
+	handler ifaces.NetHandler
+	perfect ifaces.Net
+	group   ifaces.Group
 }

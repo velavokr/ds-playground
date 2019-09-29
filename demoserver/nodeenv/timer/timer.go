@@ -2,12 +2,12 @@ package timer
 
 import (
 	"context"
-	"github.com/velavokr/gdaf"
-	"github.com/velavokr/gdaf/demoserver/runner"
+	"github.com/velavokr/dsplayground/ifaces"
+	"github.com/velavokr/dsplayground/demoserver/runner"
 	"time"
 )
 
-func NewTimer(cfg *runner.Runtime, handler gdaf.TimerHandler) gdaf.Timer {
+func NewTimer(cfg *runner.Runtime, handler ifaces.TimerHandler) ifaces.Timer {
 	return &timer{
 		rt:      cfg,
 		alarms:  alarmsMap{},
@@ -15,16 +15,16 @@ func NewTimer(cfg *runner.Runtime, handler gdaf.TimerHandler) gdaf.Timer {
 	}
 }
 
-type alarmsMap map[gdaf.TimerId]context.CancelFunc
+type alarmsMap map[ifaces.TimerId]context.CancelFunc
 
 type timer struct {
 	rt      *runner.Runtime
-	handler gdaf.TimerHandler
+	handler ifaces.TimerHandler
 	alarms  alarmsMap
-	cnt     gdaf.TimerId
+	cnt     ifaces.TimerId
 }
 
-func (t *timer) After(ticks uint32, alarmCtx interface{}) gdaf.TimerId {
+func (t *timer) After(ticks uint32, alarmCtx interface{}) ifaces.TimerId {
 	// The call is guarded by the RunGuarded mutex
 	t.cnt += 1
 	id := t.cnt
@@ -51,11 +51,11 @@ func (t *timer) After(ticks uint32, alarmCtx interface{}) gdaf.TimerId {
 	return id
 }
 
-func (t *timer) NextTick(ctx interface{}) gdaf.TimerId {
+func (t *timer) NextTick(ctx interface{}) ifaces.TimerId {
 	return t.After(1, ctx)
 }
 
-func (t *timer) CancelTimer(id gdaf.TimerId) {
+func (t *timer) CancelTimer(id ifaces.TimerId) {
 	// The call is guarded by the RunGuarded mutex
 	t.rt.Run(func() {
 		cancel := t.alarms[id]

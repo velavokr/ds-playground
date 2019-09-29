@@ -1,13 +1,13 @@
 package main
 
 import (
-	demo "github.com/velavokr/gdaf/demoserver"
-	"github.com/velavokr/gdaf/demoserver/nodeenv"
-	"github.com/velavokr/gdaf/demoserver/nodeenv/network"
-	"github.com/velavokr/gdaf/demoserver/nodeenv/timer"
-	"github.com/velavokr/gdaf/demoserver/runner"
-	"github.com/velavokr/gdaf/examples/link"
-	"github.com/velavokr/gdaf/examples/link/fifoperfect"
+	demo "github.com/velavokr/dsplayground/demoserver"
+	"github.com/velavokr/dsplayground/demoserver/nodeenv"
+	"github.com/velavokr/dsplayground/demoserver/nodeenv/network"
+	"github.com/velavokr/dsplayground/demoserver/nodeenv/timer"
+	"github.com/velavokr/dsplayground/demoserver/runner"
+	"github.com/velavokr/dsplayground/examples/link"
+	"github.com/velavokr/dsplayground/examples/link/fifoperfect"
 )
 
 func main() {

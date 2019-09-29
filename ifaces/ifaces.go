@@ -34,10 +34,7 @@ type NetHandler interface {
 	ReceiveMessage(src NodeName, message []byte)
 }
 
-// Time events ////////////////////////////////////
-
-type TimerId = int
-
+// Timer allows
 type Timer interface {
 	NextTick(ctx interface{}) TimerId
 	After(ticks uint32, ctx interface{}) TimerId
@@ -48,7 +45,8 @@ type TimerHandler interface {
 	HandleTimer(ctx interface{}, id TimerId)
 }
 
-// Crash-Restore //////////////////////////////////
+type TimerId = int
+
 
 type Storage interface {
 	OpenTable(name string) DiskTable

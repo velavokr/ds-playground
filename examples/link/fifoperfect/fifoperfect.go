@@ -3,10 +3,11 @@ package fifoperfect
 import (
 	"encoding/binary"
 	"fmt"
+	"github.com/velavokr/dsplayground/examples/link"
 	"github.com/velavokr/dsplayground/ifaces"
 )
 
-func NewFifoPerfectLink(handler ifaces.NetHandler, env ifaces.NodeEnv) ifaces.Net {
+func NewFifoPerfectLink(handler ifaces.NetHandler, env ifaces.NodeEnv) link.Link {
 	pl := &perfectFifoLink{
 		handler:   handler,
 		toSend:    map[ifaces.NodeName]*sendCtx{},

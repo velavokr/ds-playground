@@ -9,9 +9,9 @@ import (
 	"net/url"
 )
 
-func RunLinkDemo(newLink NewLink, makers ...interface{}) {
+func RunLinkDemo(newLink NewLink) {
 	rt := runner.InitFromCommandLine()
-	nodeEnv := nodeenv.NewNodeEnv(rt, makers...)
+	nodeEnv := nodeenv.NewNodeEnv(rt)
 	netHandler := &linkReceiver{rt: rt}
 	link := newLink(netHandler, nodeEnv)
 	reqHandler := &linkSender{rt: rt, link: link}

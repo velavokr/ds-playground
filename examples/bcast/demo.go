@@ -9,9 +9,9 @@ import (
 	"net/url"
 )
 
-func RunBcastDemo(newBcast NewBroadcastNet, makers ...interface{}) {
+func RunBcastDemo(newBcast NewBroadcastNet) {
 	rt := runner.InitFromCommandLine()
-	nodeEnv := nodeenv.NewNodeEnv(rt, makers...)
+	nodeEnv := nodeenv.NewNodeEnv(rt)
 	netHandler := &linkReceiver{rt: rt}
 	link := newBcast(rt.Cfg.Group, netHandler, nodeEnv)
 	reqHandler := &linkSender{rt: rt, link: link}

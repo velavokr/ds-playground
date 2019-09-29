@@ -2,9 +2,9 @@ package timer
 
 import (
 	"bytes"
-	"github.com/velavokr/dsplayground/ifaces"
 	"github.com/velavokr/dsplayground/demoserver/nodeenv"
 	"github.com/velavokr/dsplayground/demoserver/runner"
+	"github.com/velavokr/dsplayground/ifaces"
 	"testing"
 	"time"
 )

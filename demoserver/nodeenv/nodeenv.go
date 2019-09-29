@@ -3,8 +3,8 @@ package nodeenv
 import (
 	"errors"
 	"fmt"
-	"github.com/velavokr/dsplayground/ifaces"
 	"github.com/velavokr/dsplayground/demoserver/runner"
+	"github.com/velavokr/dsplayground/ifaces"
 )
 
 type NetMaker = func(rt *runner.Runtime, handler ifaces.NetHandler) ifaces.Net

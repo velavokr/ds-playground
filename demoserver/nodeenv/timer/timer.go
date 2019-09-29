@@ -2,8 +2,8 @@ package timer
 
 import (
 	"context"
-	"github.com/velavokr/dsplayground/ifaces"
 	"github.com/velavokr/dsplayground/demoserver/runner"
+	"github.com/velavokr/dsplayground/ifaces"
 	"time"
 )
 

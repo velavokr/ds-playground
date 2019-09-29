@@ -6,13 +6,13 @@ import (
 	"github.com/syndtr/goleveldb/leveldb"
 	"github.com/syndtr/goleveldb/leveldb/errors"
 	"github.com/syndtr/goleveldb/leveldb/opt"
-	"github.com/velavokr/dsplayground/ifaces"
 	"github.com/velavokr/dsplayground/demoserver/runner"
+	"github.com/velavokr/dsplayground/ifaces"
 	"path/filepath"
 )
 
 func NewStorage(rt *runner.Runtime) ifaces.Storage {
-	return &storage{rt: rt, tables:make(map[string]ifaces.DiskTable)}
+	return &storage{rt: rt, tables: make(map[string]ifaces.DiskTable)}
 }
 
 func (s *storage) OpenTable(path string) ifaces.DiskTable {
@@ -27,7 +27,7 @@ func (s *storage) OpenTable(path string) ifaces.DiskTable {
 		rt:    s.rt,
 	}
 	s.rt.Run(func() {
-		db, err := leveldb.OpenFile(f, &opt.Options{Strict:opt.StrictAll})
+		db, err := leveldb.OpenFile(f, &opt.Options{Strict: opt.StrictAll})
 		if err != nil && errors.IsCorrupted(err) {
 			db, err = leveldb.RecoverFile(f, nil)
 			if err != nil {
@@ -42,7 +42,7 @@ func (s *storage) OpenTable(path string) ifaces.DiskTable {
 					if err := db.Close(); err != nil {
 						panic(err)
 					}
-				}, runner.ExitOnPanic|runner.VerboseLog,"closing table", f)
+				}, runner.ExitOnPanic|runner.VerboseLog, "closing table", f)
 			}
 		}, runner.ExitOnPanic|runner.VerboseLog, "table closer", f)
 		t.db = db
@@ -53,7 +53,7 @@ func (s *storage) OpenTable(path string) ifaces.DiskTable {
 
 func (t *table) StoreValue(key []byte, val []byte) {
 	t.rt.Run(func() {
-		err := t.db.Put(key, val, &opt.WriteOptions{Sync:true})
+		err := t.db.Put(key, val, &opt.WriteOptions{Sync: true})
 		if err != nil {
 			panic(err)
 		}
@@ -100,6 +100,6 @@ type table struct {
 }
 
 type storage struct {
-	rt *runner.Runtime
+	rt     *runner.Runtime
 	tables map[string]ifaces.DiskTable
 }

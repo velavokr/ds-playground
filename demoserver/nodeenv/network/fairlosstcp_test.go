@@ -3,10 +3,10 @@ package network
 import (
 	"bytes"
 	"fmt"
-	"github.com/velavokr/dsplayground/ifaces"
 	"github.com/velavokr/dsplayground/demoserver/nodeenv"
 	"github.com/velavokr/dsplayground/demoserver/runner"
 	"github.com/velavokr/dsplayground/demoserver/utils"
+	"github.com/velavokr/dsplayground/ifaces"
 	"sort"
 	"strings"
 	"testing"

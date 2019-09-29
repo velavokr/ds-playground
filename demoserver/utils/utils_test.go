@@ -8,7 +8,7 @@ import (
 func TestWriteAll(t *testing.T) {
 	str := "abcdefghij"
 	for i := 0; i <= len(str); i++ {
-		w := &writer{res:[]byte{}}
+		w := &writer{res: []byte{}}
 		err := WriteAll(w, []byte(str)[:i])
 		if err != nil {
 			t.Fatal(err.Error())
@@ -27,7 +27,6 @@ func (w *writer) Write(p []byte) (n int, err error) {
 	w.res = append(w.res, p[0])
 	return 1, nil
 }
-
 
 func TestQuote(t *testing.T) {
 	tests := []struct {

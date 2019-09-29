@@ -1,20 +1,20 @@
 package link
 
 import (
-	"github.com/velavokr/dsplayground/ifaces"
 	demo "github.com/velavokr/dsplayground/demoserver"
 	"github.com/velavokr/dsplayground/demoserver/nodeenv"
 	"github.com/velavokr/dsplayground/demoserver/runner"
 	"github.com/velavokr/dsplayground/demoserver/utils"
+	"github.com/velavokr/dsplayground/ifaces"
 	"net/url"
 )
 
 func RunLinkDemo(newLink NewLink, makers ...interface{}) {
 	rt := runner.InitFromCommandLine()
 	nodeEnv := nodeenv.NewNodeEnv(rt, makers...)
-	netHandler := &linkReceiver{rt: rt,}
+	netHandler := &linkReceiver{rt: rt}
 	link := newLink(netHandler, nodeEnv)
-	reqHandler := &linkSender{rt: rt, link: link,}
+	reqHandler := &linkSender{rt: rt, link: link}
 	demo.RunServer(rt, reqHandler)
 }
 

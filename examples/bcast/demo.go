@@ -1,20 +1,20 @@
 package bcast
 
 import (
-	"github.com/velavokr/dsplayground/ifaces"
 	demo "github.com/velavokr/dsplayground/demoserver"
 	"github.com/velavokr/dsplayground/demoserver/nodeenv"
 	"github.com/velavokr/dsplayground/demoserver/runner"
 	"github.com/velavokr/dsplayground/demoserver/utils"
+	"github.com/velavokr/dsplayground/ifaces"
 	"net/url"
 )
 
 func RunBcastDemo(newBcast NewBroadcastNet, makers ...interface{}) {
 	rt := runner.InitFromCommandLine()
 	nodeEnv := nodeenv.NewNodeEnv(rt, makers...)
-	netHandler := &linkReceiver{rt: rt,}
+	netHandler := &linkReceiver{rt: rt}
 	link := newBcast(rt.Cfg.Group, netHandler, nodeEnv)
-	reqHandler := &linkSender{rt: rt, link: link,}
+	reqHandler := &linkSender{rt: rt, link: link}
 	demo.RunServer(rt, reqHandler)
 }
 
